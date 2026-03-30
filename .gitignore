@@ -1,0 +1,11 @@
+aira/
+__pycache__/
+*.pyc
+.env
+# data/
+.ipynb_checkpoints/
+readme/
+main.py/
+notebooks/
+tests/
+docs/
