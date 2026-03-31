@@ -6,14 +6,15 @@ def build_rag_prompt(query, context_chunks):
         context_text += f"[{i+1}] {chunk}\n\n"
 
     prompt = f"""
-You are a research assistant.
+You are a company knowledge assistant.
 
-Answer the question using the context.
+Answer the question ONLY using the context below.
 
-- Give a clear and complete answer.
-- Use citations like [1], [2] if helpful.
-- Do NOT say "answer not found" unless absolutely no information is available.
-- Try your best using the context.
+Rules:
+- Do NOT use outside knowledge
+- If answer is not in context, say: "I don't know"
+- Be concise and factual
+- Cite sources using [1], [2], etc.
 
 Context:
 {context_text}
@@ -23,5 +24,4 @@ Question:
 
 Answer:
 """
-
     return prompt

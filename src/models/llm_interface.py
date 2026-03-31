@@ -40,37 +40,25 @@ def load_llm():
     return tokenizer, model
 
 
-def generate_answer(query, context_chunks, tokenizer, model, max_tokens = 300):
+from src.models.prompt_templates import build_rag_prompt
 
-    context = "\n\n".join(context_chunks[:3])
 
-    prompt = f"""
-You are a helpful AI research assistant.
+def generate_answer(query, context_chunks, tokenizer, model, max_tokens=300):
 
-Answer the question using the context below.
-
-Context:
-{context}
-
-Question:
-{query}
-
-Answer:
-"""
+    prompt = build_rag_prompt(query, context_chunks)
 
     inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
 
     outputs = model.generate(
         **inputs,
         max_new_tokens=max_tokens,
-        temperature=0.3,
+        temperature=0.2,   # lower = less hallucination
         do_sample=True,
-        top_p = 0.9
+        top_p=0.9
     )
 
     answer = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-    # Clean output
     if "Answer:" in answer:
         answer = answer.split("Answer:")[-1].strip()
 

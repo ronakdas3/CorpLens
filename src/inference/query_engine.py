@@ -60,13 +60,15 @@ if __name__ == "__main__":
     # generator = load_llm()
     # tokenizer, model = load_llm()
 
-    query = "What is the main contribution of this paper?"
-    # query = "Who are the Authors of this paper at the top of the page?"
+    # query = "What is the main contribution of this paper?"
+    # query = "Who are the Authors at the top of this paper?"
+    # query = "Who are the Authors of this paper?"
     # query = "What is the transformer architecture?"
     # query = "what architecture does the paper propose?"
-    # query = "what is attention"
+    # query = "what is attention mechanism"
     # query = "what is Scaled Dot-Product Attention"
     # query = "what GPUs were used"
+    query = "how many GPUs were used"
 
 
     results = retrieve_relevant_chunks(query, chunks, index, embedding_model)

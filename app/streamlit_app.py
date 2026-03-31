@@ -1,8 +1,5 @@
 import sys
 import os
-from src.retrieval.bm25_retriever import BM25Retriever
-from src.retrieval.hybrid_retriever import HybridRetriever
-
 # Fix import path
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, ROOT_DIR)
@@ -16,7 +13,8 @@ from src.retrieval.vector_store import search_index
 # from src.retrieval.reranker import rerank_chunks
 from src.models.llm_interface import generate_answer
 from src.indexing.build_index import build_index_for_paper
-
+from src.retrieval.bm25_retriever import BM25Retriever
+from src.retrieval.hybrid_retriever import HybridRetriever
 
 # -------------------- PAGE CONFIG --------------------
 st.set_page_config(
@@ -173,6 +171,7 @@ for msg in st.session_state.messages:
         st.write(msg["content"])
 
 
+
 # -------------------- INPUT --------------------
 user_input = st.chat_input("Ask a question...")
 
@@ -220,11 +219,18 @@ if user_input:
         st.write(answer)
 
         st.caption(f"Retrieved {len(final_chunks)} relevant chunks")
+        st.caption(f"📊 Based on top {len(final_chunks)} retrieved chunks")
+        # confidence = len(final_chunks) / top_k
+        # st.caption(f"📊 Confidence Score: {confidence:.2f}")  #this will always give 0.6 for k=3 
 
         st.markdown("### 📚 Sources")
+        # for i, chunk in enumerate(final_chunks):
+        #     with st.expander(f"Source {i+1}"):
+        #         st.write(chunk)
         for i, chunk in enumerate(final_chunks):
-            with st.expander(f"Source {i+1}"):
-                st.write(chunk)
+            with st.expander(f"📄 Source [{i+1}]"):
+                st.markdown(f"**Chunk {i+1}:**")
+                st.write(chunk[:500] + "...")
 
     st.session_state.messages.append({"role": "assistant", "content": answer})
 
