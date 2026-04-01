@@ -15,6 +15,22 @@ from src.models.llm_interface import generate_answer
 from src.indexing.build_index import build_index_for_paper
 from src.retrieval.bm25_retriever import BM25Retriever
 from src.retrieval.hybrid_retriever import HybridRetriever
+from src.utils.highlighting import highlight_relevant_sentence
+from src.utils.roles import ROLE_ACCESS
+
+
+
+# filter function
+def filter_docs_by_role(docs, role):
+    allowed = ROLE_ACCESS.get(role, [])
+
+    if "all" in allowed:
+        return docs
+
+    return [
+        doc for doc in docs
+        if doc.get("department", "general") in allowed
+    ]
 
 # -------------------- PAGE CONFIG --------------------
 st.set_page_config(
@@ -44,6 +60,14 @@ with st.sidebar:
         "- LLM generation"
     )
 
+#role selector
+with st.sidebar:
+    st.header("⚙️ Settings")
+
+    role = st.selectbox(
+        "Select Role",
+        ["intern", "employee", "manager", "legal", "admin"]
+    )
 
 # -------------------- LOAD MODELS --------------------
 @st.cache_resource
@@ -188,12 +212,23 @@ if user_input:
 
         with st.spinner("Thinking... 🤔"):
 
-            # Convert chunks → documents (once per run ideally)
+            # # Convert chunks → documents (once per run ideally)
+            # documents = [
+            #     {
+            #         "text": chunk,
+            #         "doc_id": f"doc_{i}",
+            #         "chunk_id": i
+            #     }
+            #     for i, chunk in enumerate(chunks)
+            # ]
+
+            #sepeating based on roles
             documents = [
                 {
                     "text": chunk,
                     "doc_id": f"doc_{i}",
-                    "chunk_id": i
+                    "chunk_id": i,
+                    "department": "general"   # 👈 ADD THIS
                 }
                 for i, chunk in enumerate(chunks)
             ]
@@ -202,10 +237,20 @@ if user_input:
             bm25 = BM25Retriever(documents)
             retriever = HybridRetriever(index, bm25)
 
-            # Hybrid search
-            docs = retriever.hybrid_search(user_input, k=top_k)
+            # # Hybrid search
+            # docs = retriever.hybrid_search(user_input, k=top_k)
+            # final_chunks = [doc["text"] for doc in docs[:rerank_k]]
 
+#applying filter after retrieval
+            docs = retriever.hybrid_search(user_input, k=top_k)
+            # 🔐 Apply role filter
+            docs = filter_docs_by_role(docs, role)
             final_chunks = [doc["text"] for doc in docs[:rerank_k]]
+
+#if user does not have access
+            if len(docs) == 0:
+                st.warning("⚠️ No accessible documents for your role.")
+                st.stop()
 
             # Generate answer
             answer = generate_answer(
@@ -227,9 +272,26 @@ if user_input:
         # for i, chunk in enumerate(final_chunks):
         #     with st.expander(f"Source {i+1}"):
         #         st.write(chunk)
+
+        # for i, chunk in enumerate(final_chunks):
+        #     with st.expander(f"📄 Source [{i+1}]"):
+        #         st.markdown(f"**Chunk {i+1}:**")
+        #         st.write(chunk[:500] + "...")
+
+
+#highlight part 
         for i, chunk in enumerate(final_chunks):
             with st.expander(f"📄 Source [{i+1}]"):
-                st.markdown(f"**Chunk {i+1}:**")
+
+                highlight = highlight_relevant_sentence(chunk, user_input)
+
+                st.markdown("**🎯 Most Relevant Part:**")
+                # st.success(highlight)
+                st.markdown(f"👉 **{highlight}**")
+
+                st.markdown("---")
+
+                st.markdown("**Full Context:**")
                 st.write(chunk[:500] + "...")
 
     st.session_state.messages.append({"role": "assistant", "content": answer})
