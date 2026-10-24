@@ -1,4 +1,4 @@
-# 🚀 ResearchLens
+# ResearchLens
 
 **ResearchLens** is an AI-powered research assistant that allows users to interact with research papers using natural language.
 
@@ -6,26 +6,26 @@ Upload a paper or choose from default datasets, ask questions, and get context-a
 
 ---
 
-## 🌐 Live Demo
+## Live Demo
 
-👉 https://researchlenss.streamlit.app/
-
----
-
-## ✨ Features
-
-* 📄 Ask questions about research papers
-* 📤 Upload your own PDF and query it instantly
-* 📚 Switch between multiple research papers
-* 🔍 Semantic search using FAISS
-* 🧠 Cross-encoder reranking for better relevance
-* 🤖 LLM-based answer generation
-* 💬 Chat-style interface (like ChatGPT)
-* ⚙️ Adjustable answer length
+ https://researchlenss.streamlit.app/
 
 ---
 
-## 🧠 How It Works (RAG Pipeline)
+##  Features
+
+*  Ask questions about research papers
+*  Upload your own PDF and query it instantly
+*  Switch between multiple research papers
+*  Semantic search using FAISS
+*  Cross-encoder reranking for better relevance
+*  LLM-based answer generation
+*  Chat-style interface (like ChatGPT)
+*  Adjustable answer length
+
+---
+
+##  How It Works (RAG Pipeline)
 
 ```
 PDF → Text Extraction → Chunking → Embeddings → FAISS Index  
@@ -34,7 +34,7 @@ PDF → Text Extraction → Chunking → Embeddings → FAISS Index
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 
 * **Text Extraction**: Extracts raw text from PDFs
 * **Chunking**: Splits text into meaningful segments
@@ -46,7 +46,7 @@ PDF → Text Extraction → Chunking → Embeddings → FAISS Index
 
 ---
 
-## 🖥️ Demo Use Cases
+##  Demo Use Cases
 
 Try asking:
 
@@ -57,7 +57,7 @@ Try asking:
 
 ---
 
-## ⚙️ Tech Stack
+##  Tech Stack
 
 * **Frontend**: Streamlit
 * **Backend**: Python
@@ -68,7 +68,7 @@ Try asking:
 
 ---
 
-## 🚀 How to Run Locally
+##  How to Run Locally
 
 ### 1. Clone the repo
 
@@ -116,7 +116,7 @@ data/
 
 ---
 
-## ⚠️ Deployment Notes
+##  Deployment Notes
 
 * Lightweight model used for cloud deployment
 * Larger models (TinyLlama) used locally for better performance
@@ -124,7 +124,7 @@ data/
 
 ---
 
-## 🔮 Future Improvements
+##  Future Improvements
 
 * Inline citations in answers
 * Hybrid search (BM25 + embeddings)
@@ -134,7 +134,7 @@ data/
 
 ---
 
-## 💡 Key Learnings
+##  Key Learnings
 
 * Built a full RAG pipeline from scratch
 * Solved real-world deployment issues (CPU, memory limits)
@@ -143,12 +143,8 @@ data/
 
 ---
 
-## 👨‍💻 Author
+##  Author
 
 Ronak Das
 
 ---
-
-## ⭐ If you like this project
-
-Give it a star on GitHub ⭐
