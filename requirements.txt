@@ -71,3 +71,6 @@ urllib3==2.6.3
 watchdog==6.0.0
 accelerate
 
+langchain>=1.0.0
+langchain-core>=1.0.0
+langgraph>=1.0.0

@@ -1,7 +1,7 @@
 ROLE_ACCESS = {
     "intern": ["general"],
-    "employee": ["general", "hr"],
-    "manager": ["general", "hr", "finance"],
-    "legal": ["legal"],
+    "employee": ["general", "hr", "engineering"],
+    "manager": ["general", "hr", "finance", "engineering"],
+    "legal": ["general", "legal"],
     "admin": ["all"]
 }
